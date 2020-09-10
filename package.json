@@ -1,0 +1,38 @@
+{
+  "name": "shop-online-fashion",
+  "version": "0.0.1",
+  "description": "Using Node.js & MySQL to build REST API for the 'Online Shopping Site'",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/ --fix",
+    "dev": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stanisdev/shop-online-fashion.git"
+  },
+  "keywords": [
+    "node.js",
+    "mysql",
+    "rest",
+    "fastify",
+    "sequelize"
+  ],
+  "author": "Stanislav Zavalishin <javascript.nodejs.developer@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stanisdev/shop-online-fashion/issues"
+  },
+  "homepage": "https://github.com/stanisdev/shop-online-fashion#readme",
+  "dependencies": {
+    "fastify": "3.3.0",
+    "fastify-plugin": "2.3.3",
+    "sequelize": "6.3.5"
+  },
+  "devDependencies": {
+    "eslint": "^7.8.1",
+    "nodemon": "^2.0.4",
+    "sequelize-cli": "6.2.0"
+  }
+}
