@@ -1,38 +1,42 @@
 'use strict';
 
-const fp = require('fastify-plugin');
-
 function product(fastify, opts, done) {
 
   /**
-   * Get product by ID
-   */
-  fastify.route({
-    method: 'GET',
-    url: '/:id',
-    schema: {
-      response: {
-        200: { $ref: 'product/response/getById#' }
-      },
-      params: { $ref: 'product/params/getById#' }
-    },
-    async handler (req) {
-      return { hello: 'world' };
-    }
-  });
-
-  /**
-   * Get subcategories of superior category
+   * Get superior categories
    */
   fastify.route({
     method: 'GET',
     url: '/categories',
+    schema: {
+      response: {
+        200: { $ref: 'product/response/categories#' }
+      }
+    },
     async handler (req) {
-      return { ok: true };
+      const categories = await this.db.Category.getAllRaw();
+      return { categories };
+    }
+  });
+
+  /**
+   * Get products by a condition
+   */
+  fastify.route({
+    method: 'GET',
+    url: '/list',
+    schema: {
+      query: {
+        $ref: 'product/query/list#'
+      }
+    },
+    async handler (req) {
+      const data = await this.services.products.getMany(req.query);
+      return data;
     }
   });
 
   done();
 }
 
-module.exports = fp(product);
+module.exports = product;

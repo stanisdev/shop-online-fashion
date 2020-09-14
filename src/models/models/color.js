@@ -5,8 +5,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 
   class Color extends Model {
-    static associate(models) {}
-  };
+    static associate(models) {
+      Color.hasMany(models.Product);
+    }
+  }
 
   Color.init({
     hex: {

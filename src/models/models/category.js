@@ -8,7 +8,17 @@ module.exports = (sequelize, DataTypes) => {
    */
   class Category extends Model {
     static associate(models) {}
-  };
+
+    static getAllRaw() {
+      return this.findAll({
+        where: {
+          enabled: true
+        },
+        attributes: ['id', 'name'],
+        raw: true
+      });
+    }
+  }
 
   Category.init({
     name: {

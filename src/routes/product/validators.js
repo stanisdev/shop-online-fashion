@@ -5,18 +5,31 @@ const fp = require('fastify-plugin');
 function productValidators(fastify, opts, done) {
 
   fastify.addSchema({
-    $id: 'product/response/getById',
+    $id: 'product/response/categories',
     type: 'object',
     properties: {
-      hello: { type: 'string' }
+      categories: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' },
+            name: { type: 'string' }
+          }
+        }
+      }
     }
   });
 
   fastify.addSchema({
-    $id: 'product/params/getById',
+    $id: 'product/query/list',
     type: 'object',
     properties: {
-      id: { type: 'number' }
+      type: { type: 'number' },
+      brand: { type: 'number' },
+      size: { type: 'number' },
+      style: { type: 'number' },
+      color: { type: 'number' }
     }
   });
 

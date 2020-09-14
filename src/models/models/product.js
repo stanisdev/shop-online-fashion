@@ -5,8 +5,12 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 
   class Product extends Model {
-    static associate(models) {}
-  };
+    static associate(models) {
+      Product.belongsTo(models.Style);
+      Product.belongsTo(models.Brand);
+      Product.belongsTo(models.Color);
+    }
+  }
 
   Product.init({
     title: {

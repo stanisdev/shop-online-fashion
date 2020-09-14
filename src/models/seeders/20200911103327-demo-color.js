@@ -14,6 +14,10 @@ module.exports = {
       {
         id: 3,
         hex: 'FAD7A0'
+      },
+      {
+        id: 4,
+        hex: 'FFFFFF'
       }
     ];
     await queryInterface.bulkInsert('Colors', colors, {});

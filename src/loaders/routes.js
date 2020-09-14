@@ -9,14 +9,16 @@ async function routes(fastify) {
   const dirs = await fs.promises.readdir(config.routesDir);
 
   for (let a = 0; a < dirs.length; a++) {
-    const dirPath = join(config.routesDir, dirs[a]);
+    const dirName = dirs[a];
+
+    const dirPath = join(config.routesDir, dirName);
     const indexFile = join(dirPath, 'index.js');
     const validatorsFile = join(dirPath, 'validators.js');
 
     try {
       await fs.promises.stat(indexFile);
       fastify.register(require(validatorsFile));
-      fastify.register(require(indexFile));
+      fastify.register(require(indexFile), { prefix: dirName });
     } catch {}
   }
 }

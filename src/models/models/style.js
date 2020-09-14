@@ -5,8 +5,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 
   class Style extends Model {
-    static associate(models) {}
-  };
+    static associate(models) {
+      Style.hasMany(models.Product);
+    }
+  }
 
   Style.init({
     name: {

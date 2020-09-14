@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
   class Size extends Model {
     static associate(models) {}
-  };
+  }
 
   Size.init({
     size: {

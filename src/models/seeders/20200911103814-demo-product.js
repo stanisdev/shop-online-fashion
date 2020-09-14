@@ -26,6 +26,30 @@ module.exports = {
         colorId: 2,
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        id: 3,
+        title: 'All Over Rose Print Shirt',
+        desrciption: 'This brand runs true to size. To ensure the best fit, we suggest consulting the size chart',
+        price: 999,
+        discount: 40,
+        styleId: 5,
+        brandId: 4,
+        colorId: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: 4,
+        title: 'Colour Block Washed Slim Jeans',
+        desrciption: 'Material/Fabric :100% Cotton',
+        price: 2699,
+        discount: 75,
+        styleId: 3,
+        brandId: 2,
+        colorId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ];
     await queryInterface.bulkInsert('Products', products, {});
