@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(30),
       allowNull: false
     },
+    alias: {
+      type: DataTypes.STRING(60),
+      allowNull: false
+    },
     enabled: {
       type: DataTypes.BOOLEAN,
       defaultValue: true

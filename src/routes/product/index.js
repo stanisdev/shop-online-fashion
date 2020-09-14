@@ -36,6 +36,18 @@ function product(fastify, opts, done) {
     }
   });
 
+  /**
+   * Get info about type by ID
+   */
+  fastify.route({
+    method: 'GET',
+    url: '/type/:id',
+    // @TODO: add 'typeId' filter
+    async handler(req) {
+      return this.services.products.getTypeInfo(req.params.id);
+    }
+  });
+
   done();
 }
 

@@ -9,24 +9,12 @@ class Products {
   /**
    * Get many products by a condition
    */
-  async getMany({ type, limit, page }) {
-
-    const { styles, ids: styleIds } = await this.#getStyles(type);
-    const result = { styles };
-    result.products = await this.#getProducts({ styleIds, limit, page });
-
-    return result;
-  }
-
-  /**
-   * Get list of products by array of style ids
-   */
-  async #getProducts({ styleIds, limit, page }) {
+  async getMany({ type: typeId, limit, page }) {
     const restriction = this.#calcLimitOffset(limit, page);
 
     const products = await this.db.Product.findAll({
       where: {
-        styleId: styleIds,
+        typeId,
         enabled: true
       },
       include: [{
@@ -37,6 +25,7 @@ class Products {
         attributes: ['hex']
       }],
       attributes: ['id', 'title', 'price', 'discount'],
+      order: [['id', 'ASC']],
       limit: restriction.limit,
       offset: restriction.offset,
       raw: true
@@ -61,6 +50,72 @@ class Products {
         }
       }
     });
+  }
+
+  /**
+   * Get object that contains related info of a type
+   */
+  async getTypeInfo(typeId) {
+    const { styles, ids: styleIds } = await this.#getStyles(typeId);
+    const [type, brands] = await Promise.all([
+      this.#getType(typeId, styleIds),
+      this.#getBrands(styleIds)
+    ]);
+
+    return { type, styles, brands };
+  }
+
+  /**
+   * Get brands
+   */
+  async #getBrands(styleIds) {
+    const { sequelize } = this.db;
+
+    const count = await this.db.Product.findAll({
+      where: {
+        styleId: styleIds
+      },
+      attributes: [
+        'brandId', [
+          sequelize.fn('COUNT', sequelize.col('*')), 'brandsCount'
+        ]
+      ],
+      order: [[sequelize.col('brandsCount'), 'DESC']],
+      group: 'brandId',
+      raw: true
+    });
+
+    const brands = await this.db.Brand.findAll({
+      where: {
+        id: count.map(e => e.brandId)
+      }
+    });
+
+    return count.map(elem => ({
+      id: elem.brandId,
+      name: brands.find(b => b.id === elem.brandId).name,
+      count: elem.brandsCount
+    }));
+  }
+
+  /**
+   * Get data about type
+   */
+  async #getType(id, styleIds) {
+    const [type, total] = await Promise.all([
+      this.db.Type.findOne({
+        where: { id }
+      }),
+      this.db.Product.count({
+        where: {
+          styleId: styleIds
+        }
+      })
+    ]);
+    return {
+      name: type.alias,
+      productsTotal: total
+    };
   }
 
   /**

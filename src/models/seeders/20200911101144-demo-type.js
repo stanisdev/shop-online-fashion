@@ -6,6 +6,7 @@ module.exports = {
       {
         id: 1,
         name: 'Jeans',
+        alias: 'Jeans For Men ',
         categoryId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -13,6 +14,7 @@ module.exports = {
       {
         id: 2,
         name: 'Shirts',
+        alias: 'Shirts For Men',
         categoryId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -20,6 +22,7 @@ module.exports = {
       {
         id: 3,
         name: 'Joggers',
+        alias: 'Joggers',
         categoryId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -27,6 +30,7 @@ module.exports = {
       {
         id: 4,
         name: 'Dresses',
+        alias: 'Women Dresses',
         categoryId: 2,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -34,6 +38,7 @@ module.exports = {
       {
         id: 5,
         name: 'Skirts',
+        alias: 'Skirts Online',
         categoryId: 2,
         createdAt: new Date(),
         updatedAt: new Date()

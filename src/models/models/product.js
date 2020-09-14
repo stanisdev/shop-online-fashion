@@ -36,6 +36,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    /**
+     * This field is designated to avoid using excessive
+     * query while fetching products.
+     */
+    typeId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     brandId: {
       type: DataTypes.INTEGER,
       allowNull: false
