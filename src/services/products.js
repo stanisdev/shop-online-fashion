@@ -1,27 +1,29 @@
 'use strict';
 
 class Products {
-  constructor({ db }) {
+  constructor({ db, config }) {
     this.db = db;
+    this.config = config;
   }
 
   /**
    * Get many products by a condition
    */
-  async getMany({ type }) {
+  async getMany({ type, limit, page }) {
 
     const { styles, ids: styleIds } = await this.#getStyles(type);
     const result = { styles };
-    result.products = await this.#getProducts(styleIds);
+    result.products = await this.#getProducts({ styleIds, limit, page });
 
-    console.log(result.products);
     return result;
   }
 
   /**
    * Get list of products by array of style ids
    */
-  async #getProducts(styleIds) {
+  async #getProducts({ styleIds, limit, page }) {
+    const restriction = this.#calcLimitOffset(limit, page);
+
     const products = await this.db.Product.findAll({
       where: {
         styleId: styleIds,
@@ -35,8 +37,8 @@ class Products {
         attributes: ['hex']
       }],
       attributes: ['id', 'title', 'price', 'discount'],
-      limit: 10, // @move to config
-      offset: 0,
+      limit: restriction.limit,
+      offset: restriction.offset,
       raw: true
     });
 
@@ -59,6 +61,14 @@ class Products {
         }
       }
     });
+  }
+
+  /**
+   * Get limit/offset pair
+   */
+  #calcLimitOffset(limit = this.config.products.limitDefault, page = 0) {
+    const offset = limit * page;
+    return { limit, offset };
   }
 
   /**

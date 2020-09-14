@@ -29,7 +29,16 @@ function productValidators(fastify, opts, done) {
       brand: { type: 'number' },
       size: { type: 'number' },
       style: { type: 'number' },
-      color: { type: 'number' }
+      color: { type: 'number' },
+      limit: {
+        type: 'number',
+        minimum: 1,
+        maximum: fastify.config.products.maxPerPage
+      },
+      page: {
+        type: 'number',
+        minimum: 0
+      }
     }
   });
 

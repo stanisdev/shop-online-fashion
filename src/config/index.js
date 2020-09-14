@@ -9,6 +9,10 @@ const config = {
   routesDir: join(rootDir, 'routes'),
   modelsDir: join(rootDir, 'models'),
   servicesDir: join(rootDir, 'services'),
+  products: {
+    limitDefault: 10,
+    maxPerPage: 20
+  }
 };
 
 module.exports = config;
