@@ -25,14 +25,19 @@ function product(fastify, opts, done) {
   fastify.route({
     method: 'GET',
     url: '/list',
+    preHandler: fastify.filters.findType('byQuery'),
     schema: {
       query: {
         $ref: 'product/query/list#'
+      },
+      response: {
+        200: {
+          $ref: 'product/response/list#'
+        }
       }
     },
     async handler (req) {
-      const data = await this.services.products.getMany(req.query);
-      return data;
+      return this.services.products.getMany(req.query);
     }
   });
 
@@ -42,9 +47,19 @@ function product(fastify, opts, done) {
   fastify.route({
     method: 'GET',
     url: '/type/:id',
-    // @TODO: add 'typeId' filter
+    preHandler: fastify.filters.findType('byParam'),
+    schema: {
+      params: {
+        $ref: 'product/params/type#'
+      },
+      response: {
+        200: {
+          $ref: 'product/response/type#'
+        }
+      }
+    },
     async handler(req) {
-      return this.services.products.getTypeInfo(req.params.id);
+      return this.services.products.getTypeInfo(req.type);
     }
   });
 

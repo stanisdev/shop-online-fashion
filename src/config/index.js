@@ -9,6 +9,7 @@ const config = {
   routesDir: join(rootDir, 'routes'),
   modelsDir: join(rootDir, 'models'),
   servicesDir: join(rootDir, 'services'),
+  filtersDir: join(rootDir, 'filters'),
   products: {
     limitDefault: 10,
     maxPerPage: 20

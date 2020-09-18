@@ -55,12 +55,17 @@ class Products {
   /**
    * Get object that contains related info of a type
    */
-  async getTypeInfo(typeId) {
-    const { styles, ids: styleIds } = await this.#getStyles(typeId);
-    const [type, brands] = await Promise.all([
-      this.#getType(typeId, styleIds),
+  async getTypeInfo(type) {
+    const { styles, ids: styleIds } = await this.#getStyles(type.id);
+    const [total, brands] = await Promise.all([
+      this.db.Product.count({
+        where: {
+          styleId: styleIds // @todo: move to a separate sequelize scope
+        }
+      }),
       this.#getBrands(styleIds)
     ]);
+    type.productsTotal = total;
 
     return { type, styles, brands };
   }
@@ -96,26 +101,6 @@ class Products {
       name: brands.find(b => b.id === elem.brandId).name,
       count: elem.brandsCount
     }));
-  }
-
-  /**
-   * Get data about type
-   */
-  async #getType(id, styleIds) {
-    const [type, total] = await Promise.all([
-      this.db.Type.findOne({
-        where: { id }
-      }),
-      this.db.Product.count({
-        where: {
-          styleId: styleIds
-        }
-      })
-    ]);
-    return {
-      name: type.alias,
-      productsTotal: total
-    };
   }
 
   /**
