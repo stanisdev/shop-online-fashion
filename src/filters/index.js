@@ -1,5 +1,7 @@
 'use strict';
 
+const status = require('http-status');
+
 class Filters {
   constructor({ db }) {
     this.db = db;
@@ -16,7 +18,11 @@ class Filters {
         attributes: ['id', 'name', 'alias']
       });
       if (!(type instanceof Object)) {
-        throw new Error('Requested type of clothes not found'); // @todo: throw 400 error
+        throw this.createError(
+          'FST_ERR_BAD_URL',
+          'Requested type of clothes not found',
+          status.BAD_REQUEST
+        );
       }
       req.type = {
         id: type.id,

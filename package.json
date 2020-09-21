@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src/ --fix",
-    "dev": "NODE_ENV=development nodemon src/app.js"
+    "dev": "NODE_ENV=development nodemon src/app.js",
+    "start": "NODE_ENV=production node src/app.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   "dependencies": {
     "fastify": "3.3.0",
     "fastify-plugin": "2.3.3",
+    "http-status": "1.4.2",
     "mysql2": "2.1.0",
     "sequelize": "6.3.5"
   },
