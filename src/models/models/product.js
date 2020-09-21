@@ -10,6 +10,50 @@ module.exports = (sequelize, DataTypes) => {
       Product.belongsTo(models.Brand);
       Product.belongsTo(models.Color);
     }
+
+    static aggregateColors(typeId) {
+      const query = `SELECT id, hex
+        FROM Colors
+        WHERE id IN (
+          SELECT colorId as id
+          FROM Products
+          WHERE typeId = :typeId
+          GROUP BY colorId
+        )`;
+      const opts = {
+        replacements: { typeId },
+        type: sequelize.QueryTypes.SELECT
+      };
+      return sequelize.query(query, opts);
+    }
+
+    static findAllByCondition({ typeId, colorId, brandId, restriction }) {
+      const where = {
+        typeId,
+        enabled: true
+      };
+      if (Number.isInteger(colorId)) {
+        where.colorId = colorId;
+      }
+      if (Number.isInteger(brandId)) {
+        where.brandId = brandId;
+      }
+      return this.findAll({
+        where,
+        include: [{
+          model: sequelize.models.Brand,
+          attributes: ['name']
+        }, {
+          model: sequelize.models.Color,
+          attributes: ['hex']
+        }],
+        attributes: ['id', 'title', 'price', 'discount'],
+        order: [['id', 'ASC']],
+        limit: restriction.limit,
+        offset: restriction.offset,
+        raw: true
+      })
+    }
   }
 
   Product.init({

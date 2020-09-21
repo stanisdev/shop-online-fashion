@@ -9,27 +9,9 @@ class Products {
   /**
    * Get many products by a condition
    */
-  async getMany({ type: typeId, limit, page }) {
-    const restriction = this.#calcLimitOffset(limit, page);
-
-    const products = await this.db.Product.findAll({
-      where: {
-        typeId,
-        enabled: true
-      },
-      include: [{
-        model: this.db.Brand,
-        attributes: ['name']
-      }, {
-        model: this.db.Color,
-        attributes: ['hex']
-      }],
-      attributes: ['id', 'title', 'price', 'discount'],
-      order: [['id', 'ASC']],
-      limit: restriction.limit,
-      offset: restriction.offset,
-      raw: true
-    });
+  async getMany(query) {
+    query.restriction = this.#calcLimitOffset(query);
+    const products = await this.db.Product.findAllByCondition(query);
 
     return products.map(p => {
       return {
@@ -57,17 +39,18 @@ class Products {
    */
   async getTypeInfo(type) {
     const { styles, ids: styleIds } = await this.#getStyles(type.id);
-    const [total, brands] = await Promise.all([
+    const [total, brands, colors] = await Promise.all([
       this.db.Product.count({
         where: {
           styleId: styleIds // @todo: move to a separate sequelize scope
         }
       }),
-      this.#getBrands(styleIds)
+      this.#getBrands(styleIds),
+      this.db.Product.aggregateColors(type.id)
     ]);
     type.productsTotal = total;
 
-    return { type, styles, brands };
+    return { type, styles, brands, colors };
   }
 
   /**
@@ -106,7 +89,7 @@ class Products {
   /**
    * Get limit/offset pair
    */
-  #calcLimitOffset(limit = this.config.products.limitDefault, page = 0) {
+  #calcLimitOffset({ limit = this.config.products.limitDefault, page = 0 }) {
     const offset = limit * page;
     return { limit, offset };
   }

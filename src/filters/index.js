@@ -7,7 +7,7 @@ class Filters {
 
   findType(idSource) {
     return async function(req) {
-      const id = idSource == 'byParam' ? req.params.id : req.query.type;
+      const id = idSource == 'byParam' ? req.params.id : req.query.typeId;
       const type = await this.db.Type.findOne({
         where: {
           id,

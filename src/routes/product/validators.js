@@ -25,11 +25,11 @@ function productValidators(fastify, opts, done) {
     $id: 'product/query/list',
     type: 'object',
     properties: {
-      type: { type: 'number' },
-      brand: { type: 'number' },
+      typeId: { type: 'number' },
+      brandId: { type: 'number' },
       size: { type: 'number' },
       style: { type: 'number' },
-      color: { type: 'number' },
+      colorId: { type: 'number' },
       limit: {
         type: 'number',
         minimum: 1,
@@ -105,6 +105,16 @@ function productValidators(fastify, opts, done) {
       brands: {
         type: 'array',
         items: { $ref: 'plain/item#' }
+      },
+      colors: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' },
+            hex: { type: 'string' }
+          }
+        }
       }
     }
   });
